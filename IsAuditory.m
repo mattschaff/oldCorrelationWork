@@ -34,16 +34,16 @@ Aud=[];AudI=[];AudE=[];
 load(file_in);
 ss = unique(dataC.codes.data(:,11));
 % get column indices first
-corr = find(strcmp('error_LV', dataC.codes.name),1);
-TNRr = find(strcmp('TNR_LV', dataC.codes.name),1);
-sess = find(strcmp('sess', dataC.codes.name),1);
-stim = find(strcmp('stim1', dataC.codes.name),1);
+corrIndex = find(strcmp('error_LV', dataC.codes.name),1);
+TNRrIndex = find(strcmp('TNR_LV', dataC.codes.name),1);
+sessIndex = find(strcmp('sess', dataC.codes.name),1);
+stimIndex = find(strcmp('stim1', dataC.codes.name),1);
 
 % extract data
-cor = dataC.codes.data(:,corr);
-TNR = dataC.codes.data(:,TNRr);
-ses = dataC.codes.data(:,sess);
-stm = dataC.codes.data(:,stim);
+cor = dataC.codes.data(:,corrIndex);
+TNR = dataC.codes.data(:,TNRrIndex);
+ses = dataC.codes.data(:,sessIndex);
+stm = dataC.codes.data(:,stimIndex);
 
 % extract spikes
 spk_t = dataC.spikes;
