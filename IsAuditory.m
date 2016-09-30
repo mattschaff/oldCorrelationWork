@@ -65,7 +65,8 @@ for i=1:numel(ss)
     TNR_Ses = TNR(iSes);
     stm_Ses = stm(iSes);
     cor_Ses = cor(iSes);
-    
+    disp(spk_Ses);
+    break;
     % align all to stim on and then get spike rates from all trials in session
     for j = 1:numel(stm_Ses)
         % align to stim on
