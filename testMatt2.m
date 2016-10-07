@@ -1,7 +1,8 @@
-function testMatt2 = testMatt2( )
+function testMatt2 = testMatt2( startNeuron, endNeuron, removeCatchTrials )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
+        
 %plan
     % load aud neurons
     AudNeuronIDContainer = load('A1_AuditoryNeurons.mat');
@@ -22,7 +23,15 @@ function testMatt2 = testMatt2( )
         numAudNeurons = numel(AudNeuronIDs);
         %loop
         NeuronCollector = [];
+        neuronCount = 0;
         for i=1:numAudNeurons
+            %skip neurons that don't matter
+            if AudNeuronIDs(i) < startNeuron
+                continue
+            end
+            if AudNeuronIDs(i) > endNeuron
+                continue
+            end
             %extract data per neuron
             iSes = ses==AudNeuronIDs(i);
             spk_indiv = spikes(iSes);
@@ -31,23 +40,24 @@ function testMatt2 = testMatt2( )
             ses_indiv = ses(iSes); %this will always be the same number
             stm_indiv = stm(iSes);
             % save neuron metadata
-            NeuronCollector(i).ID = AudNeuronIDs(i);
-            NeuronCollector(i).trials = [];
+            neuronCount = neuronCount + 1;
+            NeuronCollector(neuronCount).ID = AudNeuronIDs(i);
+            NeuronCollector(neuronCount).trials = [];
             %loop through trials
             signal_trial_count = 0; %signal trial count --> we're only counting signal trials
             for j=1:numel(ses_indiv)
                 %throw out catch trials
-                if isnan(TNR_indiv(j))
+                if removeCatchTrials && isnan(TNR_indiv(j))
                     continue
                 end
                 signal_trial_count = signal_trial_count + 1;
                 %load basic trial info into collector
                     %TONE
-                    NeuronCollector(i).trials(signal_trial_count).TNR = TNR_indiv(j);
+                    NeuronCollector(neuronCount).trials(signal_trial_count).TNR = TNR_indiv(j);
                     %stim on
-                    NeuronCollector(i).trials(signal_trial_count).stim_on = stm_indiv(j);
+                    NeuronCollector(neuronCount).trials(signal_trial_count).stim_on = stm_indiv(j);
                     %monkey response
-                    NeuronCollector(i).trials(signal_trial_count).monkey_response = cor_indiv(j);
+                    NeuronCollector(neuronCount).trials(signal_trial_count).monkey_response = cor_indiv(j);
                 %load spike data into collector
                     % first, align all to stim on and then get spike rates from all trials in session
                     spikes_indiv_ses = spk_indiv{j};
@@ -56,12 +66,14 @@ function testMatt2 = testMatt2( )
                         spikes_indiv_ses(k) = spikes_indiv_ses(k) - stm_indiv(j);
                         spikes_indiv_ses(k) = spikes_indiv_ses(k)*1000; % convert to ms
                     end
-                    NeuronCollector(i).trials(signal_trial_count).spikes = spikes_indiv_ses;
-                    NeuronCollector(i).trials(signal_trial_count).spike_sum = sum(spikes_indiv_ses>=0 & spikes_indiv_ses<= 750);
+                    NeuronCollector(neuronCount).trials(signal_trial_count).spikes = spikes_indiv_ses;
+                    NeuronCollector(neuronCount).trials(signal_trial_count).spike_sum = sum(spikes_indiv_ses>=0 & spikes_indiv_ses<= 750);
             end
 
             
         end
-        save('test', 'NeuronCollector');
+        if ~removeCatchTrials; catchText = 'nocatch_'; else catchText = ''; end;
+        filename = char(strcat('NeuronData_', num2str(startNeuron), '_', num2str(endNeuron), '_', catchText, string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss-Z'))));
+        save(filename, 'NeuronCollector');
 end
 
