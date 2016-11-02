@@ -53,8 +53,8 @@ spk = spk_t(:,2);
 % for each neuron seperately
 for i=1:numel(ss)
   iSes = ses==ss(i);
-  disp(ss(i))
-  disp(['Calculating whether ' num2str(ss(i)) ' is auditory ']);
+  %disp(ss(i))
+  %disp(['Calculating whether ' num2str(ss(i)) ' is auditory ']);
 
   
   Baseline=[];
@@ -65,8 +65,7 @@ for i=1:numel(ss)
     TNR_Ses = TNR(iSes);
     stm_Ses = stm(iSes);
     cor_Ses = cor(iSes);
-    disp(spk_Ses);
-    break;
+    disp(strcat(num2str(ss(i)), '--', num2str(numel(stm_Ses))));
     % align all to stim on and then get spike rates from all trials in session
     for j = 1:numel(stm_Ses)
         % align to stim on
@@ -87,15 +86,15 @@ for i=1:numel(ss)
     % All catch (i.e., NOISE) trials including Correct Rejections and False Alarms
     spk_Ct =  spk_Ses(isnan(TNR_Ses));
     
-KeepTrackTNR=[]
-    for n= 1:nTNR %sort by TNR
-    foo=[]
-    for m = 1:size(spk_Tins_C{n},1)
-      Baseline = [Baseline sum(spk_Tins_C{n}{m}>=-750 & spk_Tins_C{n}{m}<0)];
-     foo= [foo sum(spk_Tins_C{n}{m}>=0 & spk_Tins_C{n}{m}<= 750)];
-    end
-    KeepTrackTNR=[KeepTrackTNR nanmean(foo)]
-    end
+% KeepTrackTNR=[]
+%     for n= 1:nTNR %sort by TNR
+%     foo=[]
+%     for m = 1:size(spk_Tins_C{n},1)
+%       Baseline = [Baseline sum(spk_Tins_C{n}{m}>=-750 & spk_Tins_C{n}{m}<0)];
+%      foo= [foo sum(spk_Tins_C{n}{m}>=0 & spk_Tins_C{n}{m}<= 750)];
+%     end
+%     KeepTrackTNR=[KeepTrackTNR nanmean(foo)]
+%     end
     
 end
 
