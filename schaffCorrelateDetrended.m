@@ -34,8 +34,8 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
                             noise_corr_1 = corrcoef([neuronA.sig_trials([neuronA.sig_trials.monkey_response] == 1).spike_sum_D], [neuronB.sig_trials([neuronB.sig_trials.monkey_response] == 1).spike_sum_D]);
                             neuron_comparisons(comparison_count).noise_corr_1 = noise_corr_1(1,2);
                             %2
-                            noise_corr_2 = corrcoef([neuronA.sig_trials([neuronA.sig_trials.monkey_response] == 2).spike_sum_D], [neuronB.sig_trials([neuronB.sig_trials.monkey_response] == 2).spike_sum_D]);
-                            neuron_comparisons(comparison_count).noise_corr_2 = noise_corr_2(1,2);
+                            %noise_corr_2 = corrcoef([neuronA.sig_trials([neuronA.sig_trials.monkey_response] == 2).spike_sum_D], [neuronB.sig_trials([neuronB.sig_trials.monkey_response] == 2).spike_sum_D]);
+                            %neuron_comparisons(comparison_count).noise_corr_2 = noise_corr_2(1,2);
 %                         %first half of trial
 %                         noise_corr_first = corrcoef([neuronA.sig_trials.spike_sum_first375], [neuronB.sig_trials.spike_sum_first375]);
 %                         neuron_comparisons(comparison_count).noise_corr_first = noise_corr_first(1,2);
@@ -48,10 +48,10 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
                     B_signal = [];
                     A_signal_0 = [];
                     A_signal_1 = [];
-                    A_signal_2 = [];
+                    %A_signal_2 = [];
                     B_signal_0 = [];
                     B_signal_1 = [];
-                    B_signal_2 = [];
+                    %B_signal_2 = [];
                     for t=1:nTNR
                         %disp(TNRs(t));
                         TNRindexB = neuronB.sig_trials([neuronB.sig_trials.TNR] == TNRs(t));
@@ -70,17 +70,17 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
                            A_signal_1(t) = mean([TNRindexA([TNRindexA.monkey_response] == 1).spike_sum_D]);
                            B_signal_1(t) = mean([TNRindexB([TNRindexB.monkey_response] == 1).spike_sum_D]);
                            %2
-                           A_signal_2(t) = mean([TNRindexA([TNRindexA.monkey_response] == 2).spike_sum_D]);
-                           B_signal_2(t) = mean([TNRindexB([TNRindexB.monkey_response] == 2).spike_sum_D]);
+                           %A_signal_2(t) = mean([TNRindexA([TNRindexA.monkey_response] == 2).spike_sum_D]);
+                           %B_signal_2(t) = mean([TNRindexB([TNRindexB.monkey_response] == 2).spike_sum_D]);
                     end
                     signal_corr = corrcoef(A_signal, B_signal);
                     signal_corr_0 = corrcoef(A_signal_0, B_signal_0);
                     signal_corr_1 = corrcoef(A_signal_1, B_signal_1);
-                    signal_corr_2 = corrcoef(A_signal_2, B_signal_2);
+                    %signal_corr_2 = corrcoef(A_signal_2, B_signal_2);
                     neuron_comparisons(comparison_count).signal_correlation = signal_corr(1,2);
                     neuron_comparisons(comparison_count).signal_corr_0 = signal_corr_0(1,2);
                     neuron_comparisons(comparison_count).signal_corr_1 = signal_corr_1(1,2);
-                    neuron_comparisons(comparison_count).signal_corr_2 = signal_corr_2(1,2);
+                    %neuron_comparisons(comparison_count).signal_corr_2 = signal_corr_2(1,2);
                 end
             end
             
@@ -89,8 +89,12 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
             %save neuron_comparisons;
             %forPlot = [[neuron_comparisons.noise_corr_0], [neuron_comparisons.noise_corr_1], [neuron_comparisons.noise_corr_2]];
             %boxplot(forPlot);
-            save(filename, 'neuron_comparisons');
+            %save(filename, 'neuron_comparisons');
+            %schaffVisualizeData(neuron_comparisons);
             %scatter([neuron_comparisons.noise_correlation],[neuron_comparisons.signal_correlation]);
+            hit_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 0).monkey_response]);
+            miss_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 1).monkey_response]);
+            disp(hit_trials/(hit_trials + miss_trials));
             
 end
 
