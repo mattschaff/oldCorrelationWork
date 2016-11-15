@@ -25,7 +25,9 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
                     %get noise correlation regardless of TNR
                         %whole trial
                         noise_corr = corrcoef([neuronA.sig_trials.spike_sum_D], [neuronB.sig_trials.spike_sum_D]);
+                        noise_corr_pre = corrcoef([neuronA.sig_trials.spike_sum_pre_D], [neuronB.sig_trials.spike_sum_pre_D]);
                         neuron_comparisons(comparison_count).noise_correlation = noise_corr(1,2);
+                        neuron_comparisons(comparison_count).noise_correlation_pre = noise_corr_pre(1,2);
                         %responses
                             %0
                             noise_corr_0 = corrcoef([neuronA.sig_trials([neuronA.sig_trials.monkey_response] == 0).spike_sum_D], [neuronB.sig_trials([neuronB.sig_trials.monkey_response] == 0).spike_sum_D]);

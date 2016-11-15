@@ -64,17 +64,20 @@ function testMatt2 = testMatt2( startNeuron, endNeuron )
                     end
                     NeuronCollector(neuronCount).trials(trial_count).spikes = spikes_indiv_ses;
                     NeuronCollector(neuronCount).trials(trial_count).spike_sum = sum(spikes_indiv_ses>=0 & spikes_indiv_ses<= 750);
-                    %NeuronCollector(neuronCount).trials(signal_trial_count).detrended_spike_sum = [gauss_smooth([NeuronCollector(neuronCount).trials.spike_sum],10)];
+                    NeuronCollector(neuronCount).trials(trial_count).spike_sum_pre450 = sum(spikes_indiv_ses>=-450 & spikes_indiv_ses<= 0);
                     NeuronCollector(neuronCount).trials(trial_count).spike_sum_first375 = sum(spikes_indiv_ses>=0 & spikes_indiv_ses<= 375);
                     NeuronCollector(neuronCount).trials(trial_count).spike_sum_last375 = sum(spikes_indiv_ses>375 & spikes_indiv_ses<= 750);
             end
-        %plot([NeuronCollector(1).trials.spike_sum]); hold on;
-        %plot(gauss_smooth([NeuronCollector(1).trials.spike_sum],10));
+            %detrend spike sum
             NeuronCollector(neuronCount).trend_spike_sum_array = [gauss_smooth([NeuronCollector(neuronCount).trials.spike_sum],10)];
             NeuronCollector(neuronCount).spike_sum_array = transpose([NeuronCollector(neuronCount).trials.spike_sum]);
             NeuronCollector(neuronCount).detrended_spike_sum_array = NeuronCollector(neuronCount).spike_sum_array - NeuronCollector(neuronCount).trend_spike_sum_array;
+            %detrend pre 450 spike sum
+            NeuronCollector(neuronCount).trend_spike_sum_array_pre450 = [gauss_smooth([NeuronCollector(neuronCount).trials.spike_sum_pre450],10)];
+            NeuronCollector(neuronCount).spike_sum_array_pre450 = transpose([NeuronCollector(neuronCount).trials.spike_sum_pre450]);
+            NeuronCollector(neuronCount).detrended_spike_sum_array_pre450 = NeuronCollector(neuronCount).spike_sum_array_pre450 - NeuronCollector(neuronCount).trend_spike_sum_array_pre450;
+            %get TNR array
             NeuronCollector(neuronCount).TNR_array = TNR_indiv;
-            
             %reload detrended data into neuroncollector
             signal_trial_count = 0;
             for h=1:numel(ses_indiv)
@@ -91,7 +94,7 @@ function testMatt2 = testMatt2( startNeuron, endNeuron )
                     NeuronCollector(neuronCount).sig_trials(signal_trial_count).monkey_response = cor_indiv(h);
                 %spikes
                 NeuronCollector(neuronCount).sig_trials(signal_trial_count).spike_sum_D = NeuronCollector(neuronCount).detrended_spike_sum_array(h);
-                
+                NeuronCollector(neuronCount).sig_trials(signal_trial_count).spike_sum_pre_D = NeuronCollector(neuronCount).detrended_spike_sum_array_pre450(h);
             end
         end
         filename = char(strcat('NeuronData_', num2str(startNeuron), '_', num2str(endNeuron), '_', string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss-Z'))));
