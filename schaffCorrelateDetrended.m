@@ -92,7 +92,7 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
             %forPlot = [[neuron_comparisons.noise_corr_0], [neuron_comparisons.noise_corr_1], [neuron_comparisons.noise_corr_2]];
             %boxplot(forPlot);
             %save(filename, 'neuron_comparisons');
-            %schaffVisualizeData(neuron_comparisons);
+            schaffVisualizeData(neuron_comparisons);
             %scatter([neuron_comparisons.noise_correlation],[neuron_comparisons.signal_correlation]);
             hit_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 0).monkey_response]);
             miss_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 1).monkey_response]);
