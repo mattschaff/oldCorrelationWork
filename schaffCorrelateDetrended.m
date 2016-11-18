@@ -1,8 +1,8 @@
-function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
+function schaffCorrelate = schaffCorrelateDetrended( NeuronCollector )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     %SETUP
-        load(NeuronData);
+        %load(NeuronData);
         numNeurons = numel(NeuronCollector);
         %tones
         TNRs = (60:5:85)';
@@ -85,18 +85,8 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronData )
                     %neuron_comparisons(comparison_count).signal_corr_2 = signal_corr_2(1,2);
                 end
             end
-            
-            
-            filename = char(strcat('D_neuron_comparisons_', string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss-Z'))));
-            %save neuron_comparisons;
-            %forPlot = [[neuron_comparisons.noise_corr_0], [neuron_comparisons.noise_corr_1], [neuron_comparisons.noise_corr_2]];
-            %boxplot(forPlot);
-            %save(filename, 'neuron_comparisons');
             schaffVisualizeData(neuron_comparisons);
-            %scatter([neuron_comparisons.noise_correlation],[neuron_comparisons.signal_correlation]);
-            hit_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 0).monkey_response]);
-            miss_trials = numel([NeuronCollector(1).sig_trials([NeuronCollector(1).sig_trials.monkey_response] == 1).monkey_response]);
-            disp(hit_trials/(hit_trials + miss_trials));
+            schaffCorrelate = neuron_comparisons;
             
 end
 
