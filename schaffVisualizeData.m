@@ -1,8 +1,10 @@
-function VisualizeData = schaffVisualizeData( neuron_comparisons )
+function VisualizeData = schaffVisualizeData( neuron_comparisons, numNeurons, filename )
 %SCHAFFVISUALIZEDATA Summary of this function goes here
 %   Detailed explanation goes here
 	%overall figure
-    set(figure, 'Position', [100, 100, 1049, 895]);
+    h = figure;
+    set(h, 'Visible', 'off');
+    set(h, 'Position', [100, 100, 1049, 895]);
     %scatter
         subplot(3,2,1);
         
@@ -33,9 +35,9 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
         hold off;
         Labels = {'', 'HIT', 'MISS', ''};
         set(gca, 'XTick', 1:4, 'XTickLabel', Labels);
-        axis([1,4,0,.3]);
+        axis([1,4,0,max(y_values) + .2]);
         ylabel('Noise Correlation');
-        title('Noise Correlation for Cohort 143-160');
+        title('Noise Correlation');
             %t test
             [h,p] = ttest([neuron_comparisons.noise_corr_0], [neuron_comparisons.noise_corr_1], 'Alpha',0.05);
             disp([h,p]);
@@ -45,7 +47,7 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
                 xt = get(gca, 'XTick');
                 yt = get(gca, 'YTick');
                 hold on;
-                plot([2, 3], [max(y_values)*1.4, max(y_values)*1.4], '-k',  [2.5], [max(y_values)*1.5], '*k');
+                plot([2, 3], [max(y_values) + .1, max(y_values)+ .1], '-k',  [2.5], [max(y_values)+ .15], '*k');
                 hold off;
             end
     %noise correlation +S
@@ -62,9 +64,9 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
         hold off;
         Labels = {'', 'HIT', 'MISS', ''};
         set(gca, 'XTick', 1:4, 'XTickLabel', Labels);
-        axis([1,4,0,.3]);
+        axis([1,4,0,max(y_values) + .2]);
         ylabel('Noise Correlation');
-        title('(+S) Noise Correlation for Cohort 143-160');
+        title('(+S) Noise Correlation');
             %t test
             [h,p] = ttest([neuron_comparisons([neuron_comparisons.signal_correlation] >= 0).noise_corr_0], [neuron_comparisons([neuron_comparisons.signal_correlation] >= 0).noise_corr_1], 'Alpha',0.05);
             disp([h,p]);
@@ -74,7 +76,7 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
                 xt = get(gca, 'XTick');
                 yt = get(gca, 'YTick');
                 hold on;
-                plot([2, 3], [max(y_values)*1.4, max(y_values)*1.4], '-k',  [2.5], [max(y_values)*1.5], '*k');
+                plot([2, 3], [max(y_values) + .1, max(y_values)+ .1], '-k',  [2.5], [max(y_values)+ .15], '*k');
                 hold off;
             end
     %noise correlation -S
@@ -91,9 +93,9 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
         hold off;
         Labels = {'', 'HIT', 'MISS', ''};
         set(gca, 'XTick', 1:4, 'XTickLabel', Labels);
-        axis([1,4,0,.3]);
+        axis([1,4,0,max(y_values) + .2]);
         ylabel('Noise Correlation');
-        title('(-S) Noise Correlation for Cohort 143-160');
+        title('(-S) Noise Correlation');
         %t test
             [h,p] = ttest([neuron_comparisons([neuron_comparisons.signal_correlation] <= 0).noise_corr_0], [neuron_comparisons([neuron_comparisons.signal_correlation] <= 0).noise_corr_1], 'Alpha',0.05);
             disp([h,p]);
@@ -103,7 +105,7 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
                 xt = get(gca, 'XTick');
                 yt = get(gca, 'YTick');
                 hold on;
-                plot([2, 3], [max(y_values)*1.4, max(y_values)*1.4], '-k',  [2.5], [max(y_values)*1.5], '*k');
+                plot([2, 3], [max(y_values) + .1, max(y_values)+ .1], '-k',  [2.5], [max(y_values)+ .15], '*k');
                 hold off;
             end    
     %noise correl before vs after
@@ -125,9 +127,9 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
         hold off;
         Labels = {'', 'AFTER', 'BEFORE', ''};
         set(gca, 'XTick', 1:4, 'XTickLabel', Labels);
-        axis([1,4,0,.4]);
+        axis([1,4,0,max(y_values) + .2]);
         ylabel('Noise Correlation');
-        title('Noise Correlation (After vs Before) for Cohort 143-160');
+        title('Noise Correlation (After vs Before)');
             %t test
             [h,p] = ttest([neuron_comparisons.noise_correlation], [neuron_comparisons.noise_correlation_pre], 'Alpha',0.05);
             disp([h,p]);
@@ -137,11 +139,17 @@ function VisualizeData = schaffVisualizeData( neuron_comparisons )
                 xt = get(gca, 'XTick');
                 yt = get(gca, 'YTick');
                 hold on;
-                plot([2, 3], [max(y_values)*1.4, max(y_values)*1.4], '-k',  [2.5], [max(y_values)*1.5], '*k');
+                plot([2, 3], [max(y_values) + .1, max(y_values)+ .1], '-k',  [2.5], [max(y_values)+ .15], '*k');
                 hold off;
             end
-    suptitle('Cohort 143-160');
+    
+    start_neuron = num2str(neuron_comparisons(1).neurons(1));
+    end_neuron = num2str(neuron_comparisons(end).neurons(2));
+    disp(strcat({'Cohort '}, start_neuron, '-',end_neuron));
+    suptitle(strcat({'Cohort '}, start_neuron, '-',end_neuron, {' N = '}, num2str(numNeurons), {' C = '}, num2str(numel(neuron_comparisons))));
     %close figures
     %delete(findall(0,'Type','figure'))
+    saveas(gcf, strcat(filename, '/', start_neuron, '-',end_neuron, '_numneurons_',num2str(numNeurons),  '.jpg'));
+    close;
 end
 

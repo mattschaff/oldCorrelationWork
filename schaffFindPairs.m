@@ -33,6 +33,9 @@ function schaffFindPairs = schaffFindPairs()
             % save neuron metadata
         end
         %loop through days
+        filename = char(strcat('Data/', 'CorrelationOutput_', string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss'))));
+        mkdir(filename);
+        mkdir(strcat(filename, '/figures'));
         for i=1:numel(dayCollector)
             if (i==4)
                 continue;
@@ -40,9 +43,9 @@ function schaffFindPairs = schaffFindPairs()
             %disp([dayCollector(i).neurons]);
             dayCollector(i).num_neurons = numel(dayCollector(i).neurons);
             dayCollector(i).StructuredNeuronData = testMatt2(min(dayCollector(i).neurons), max(dayCollector(i).neurons));
-            dayCollector(i).Correlations = schaffCorrelateDetrended(dayCollector(i).StructuredNeuronData);
+            dayCollector(i).Correlations = schaffCorrelateDetrended(dayCollector(i).StructuredNeuronData, strcat(filename, '/figures'));
         end
-        filename = char(strcat('CorrelationOutput_', string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss'))));
-        %save(filename, 'dayCollector');
+        
+        save(strcat(filename, '/correlation_data'), 'dayCollector');
 end
 

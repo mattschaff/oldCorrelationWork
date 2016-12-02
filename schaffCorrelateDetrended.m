@@ -1,4 +1,4 @@
-function schaffCorrelate = schaffCorrelateDetrended( NeuronCollector )
+function schaffCorrelate = schaffCorrelateDetrended( NeuronCollector, filename )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
     %SETUP
@@ -85,7 +85,7 @@ function schaffCorrelate = schaffCorrelateDetrended( NeuronCollector )
                     %neuron_comparisons(comparison_count).signal_corr_2 = signal_corr_2(1,2);
                 end
             end
-            schaffVisualizeData(neuron_comparisons);
+            schaffVisualizeData(neuron_comparisons, numNeurons, filename);
             schaffCorrelate = neuron_comparisons;
             
 end
