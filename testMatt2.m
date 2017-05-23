@@ -98,7 +98,7 @@ function testMatt2 = testMatt2( startNeuron, endNeuron )
             end
         end
         filename = char(strcat('NeuronData_', num2str(startNeuron), '_', num2str(endNeuron), '_', string(datetime('now','TimeZone','local','Format','MMM-d-y-HH:mm:ss-Z'))));
-        %save(filename, 'NeuronCollector');
+        save(filename, 'NeuronCollector');
         testMatt2 = NeuronCollector;
 end
 
